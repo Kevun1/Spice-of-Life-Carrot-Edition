@@ -11,6 +11,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -110,7 +111,8 @@ public class FoodContainerItem extends Item {
 
         ItemStack bestFood = handler.getStackInSlot(bestFoodSlot);
         if (bestFood.isFood() && !bestFood.isEmpty()) {
-            ItemStack result = bestFood.onItemUseFinish(world, entity);
+            ItemStack result = ForgeEventFactory.onItemUseFinish(player, bestFood.copy(),
+                player.getItemInUseCount(), bestFood.onItemUseFinish(player.world, player));
             // put bowls/bottles etc. into player inventory
             if (!result.isFood()) {
                 handler.setStackInSlot(bestFoodSlot, ItemStack.EMPTY);
